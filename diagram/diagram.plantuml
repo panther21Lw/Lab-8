@@ -1,0 +1,69 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class BFSFactory {
+  + BFSFactory(): 
+  + createSearch(Component): Iterator
+}
+class BFSIterator {
+  + BFSIterator(Component): 
+  + hasNext(): boolean
+  + next(): Component
+}
+interface Component << interface >> {
+  + operation(): void
+}
+class Composite {
+  + Composite(String): 
+  - children: List<Component>
+  + operation(): void
+  + remove(Component): void
+  + add(Component): void
+   children: List<Component>
+}
+
+class DFSFactory {
+  + DFSFactory(): 
+  + createSearch(Component): Iterator
+}
+class DFSIterator {
+  + DFSIterator(Component): 
+  + hasNext(): boolean
+  + next(): Component
+}
+interface Iterator << interface >> {
+  + next(): Component
+  + hasNext(): boolean
+}
+class Leaf {
+  + Leaf(int): 
+  + operation(): void
+}
+class Main {
+  + Main(): 
+  + main(String[]): void
+  - selectAlgorithm(SearchFactory, Composite, String): void
+}
+interface SearchFactory << interface >> {
+  + createSearch(Component): Iterator
+}
+
+BFSFactory         -[#595959,dashed]->  BFSIterator       : "«create»"
+BFSFactory         -[#008200,dashed]-^  SearchFactory     
+BFSIterator       "1" *-[#595959,plain]-> "q\n*" Component         
+BFSIterator        -[#008200,dashed]-^  Iterator          
+Composite          -[#008200,dashed]-^  Component         
+Composite         "1" *-[#595959,plain]-> "children\n*" Component         
+DFSFactory         -[#595959,dashed]->  DFSIterator       : "«create»"
+DFSFactory         -[#008200,dashed]-^  SearchFactory     
+DFSIterator       "1" *-[#595959,plain]-> "stack\n*" Component         
+DFSIterator        -[#008200,dashed]-^  Iterator          
+Leaf               -[#008200,dashed]-^  Component         
+Main               -[#595959,dashed]->  BFSFactory        : "«create»"
+Main               -[#595959,dashed]->  Composite         : "«create»"
+Main               -[#595959,dashed]->  DFSFactory        : "«create»"
+Main               -[#595959,dashed]->  Leaf              : "«create»"
+@enduml
